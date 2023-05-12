@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <p>Title:</p>
+        <p><input type="text" id="subjectInput" value="the price of bananas"></p>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Time Point</th>
+                <th>Data Value</th>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Jan."></td>
+                <td><input type="text" class="value" value="130"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Feb."></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Mar."></td>
+                <td><input type="text" class="value" value="130"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Apr."></td>
+                <td><input type="text" class="value" value="220"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="May"></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Jun."></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Jul."></td>
+                <td><input type="text" class="value" value="180"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Aug."></td>
+                <td><input type="text" class="value" value="180"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Sep."></td>
+                <td><input type="text" class="value" value="170"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Oct."></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Nov."></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="time" value="Dec."></td>
+                <td><input type="text" class="value" value="200"></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <input type="button" id="startButton" value="Analyze">
+    </div>
+    <div>
+        <p>Or... Would like to use .CSV file? <input type="file" id="supportCSV" value="Use .csv File"></p>
+    </div>
+    <div id="result">
+        <p>Please input the data and clikc the button, the result will be displayed here.</p>
+    </div>
+    <script>
+
+        function generateIntroductory(subject)
+        {
+            var str = "This is a report regardinng " + subject +". ";
+            return str;
+
+        };
+        function generateDescribe(subject, timeList, valueList)
+        {
+            var random;
+            var describe = "";
+            if(timeList.length != valueList.length)
+            {
+                alert("Error! The number of Time Point is not equal to the number of Data Value.");
+                describe = "Error! The number of Time Point is not equal to the number of Data Value. ";
+                return describe;
+            }
+            else{
+                var dataNumber = timeList.length;
+                //describe += ("There are "  + dataNumber + " datas inserted. ");
+                for(var i=0; i<dataNumber-1; i++)
+                {
+                    console.log(timeList[i].value);
+                    console.log(timeList[i+1].value);
+                    describe += ("From " + timeList[i].value + " to " + timeList[i+1].value + ", ");
+                    random=Math.round(Math.random());
+                    console.log(i, valueList[i].value, valueList[i+1].value);
+                    console.log(random)
+                    if(Number(valueList[i].value) < Number(valueList[i+1].value))
+                    {
+                        console.log(valueList[i].value + "<" + valueList[i+1].value + (Number(valueList[i].value) < Number(valueList[i+1].value)));
+                        if(random == 1)
+                        {
+                            describe += (subject + " goes up from " + valueList[i].value + " to "+ valueList[i+1].value + ". ");
+                        }
+                        else
+                        {
+                            describe += ("there is a rise on " + subject + " . It rose from " + valueList[i].value + " to "+ valueList[i+1].value + ". ");
+                        }
+                        
+                    }
+                    else
+                    {
+                        if(Number(valueList[i].value) > Number(valueList[i+1].value))
+                        {
+                            console.log(valueList[i].value + ">" + valueList[i+1].value + (Number(valueList[i].value) > Number(valueList[i+1].value)));
+                            if(random == 0)
+                            {
+                                describe += (subject + " goes down from " + valueList[i].value + " to "+ valueList[i+1].value + ". ");
+                            }
+                            else
+                            {
+                                describe += ("there is a drop on " + subject + " . It decreased from " + valueList[i].value + " to "+ valueList[i+1].value + ". ");
+                            }
+                        
+                        }
+                        else
+                        {
+                            describe += (subject + " remain statble at " + valueList[i].value + ". ");
+                        }
+                    }
+                }
+                return describe;
+            }
+
+        };
+
+        document.getElementById("startButton").onclick=function(){
+            var subject = document.getElementById("subjectInput").value;
+
+            var timeList = document.getElementsByClassName("time");
+            var valueList = document.getElementsByClassName("value");
+
+            var describe = "";
+
+            i=0;
+            console.log(timeList[i].value);
+
+            //console.log(timeList[0].value);
+
+            ///console.log(subject,name1,value1,name2,value2,name3,value3,name4,value4);
+
+            startSentence = generateIntroductory(subject);
+            describe += startSentence;
+            //console.log(startSentence);
+
+            paragraph = generateDescribe(subject, timeList, valueList);
+            describe += paragraph;
+            //console.log(paragraph);
+
+            document.getElementById("result").innerText = describe;
+        }
+
+        document.getElementById("supportCSV").onchange=function(){
+            var e = event;
+            var timeList = [];
+            var valueList = [];
+            var temp = [];
+            var i = 0;
+            console.log(e);
+            var File = e.target.files[0];
+           // console.log(File+"file");
+            let reader = new FileReader();
+            reader.onload = function(){
+                //console.log(reader.result+"result");
+                csvContent = reader.result;
+                //console.log(csvContent);
+                csvContent = csvContent.split(/[\r\n]/);
+                //console.log(csvContent);
+                for(var j = 0; j < 24; j=j+2)
+                {
+                    temp = csvContent[j].split(",");
+                    //console.log(temp[0]);
+                    //console.log(temp[1]);
+                    //console.log(document.getElementsByClassName("time")[i].value);
+                    document.getElementsByClassName("time")[i].value = temp[0];
+                    document.getElementsByClassName("value")[i].value = temp[1];
+                    i++;
+                }
+            }
+            reader.readAsText(File);
+
+
+        }
+            
+    </script>
+</body>
+</html>
