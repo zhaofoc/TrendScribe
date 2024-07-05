@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>统计页面</title>
+    <title>Trend Generator</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -185,6 +185,7 @@
 
     <script>
         var beginIncreaseVerb = ["went up", "increased", "rose", "climbed"];
+        var difficultIncreaseVerb = ["soared", "surged"];
         var beginIncreaseNoun = ["increase", "rise", "climb"];
         var beginDecreaseVerb = ["went down", "decreased", "fell", "dropped"];
         var beginDecreaseNoun = ["decrease", "fall", "drop"];
@@ -272,7 +273,6 @@
             }
             else {
                 random_word = Math.random();
-                console.log(random_word);
                 if (random_word < 0.3) {
                     arrMember = 0;
                 }
@@ -449,10 +449,13 @@
 
                             if (random_1 == 1) {
                                 if (random_2 == 1) {
-                                    describe += (subject + " " + beginIncreaseVerb[arrMember] + " from " + valueList[i].value + " to " + valueList[i + 1].value + " by " + differenceThisTime + ". ");
+                                    describe += (subject + " " + beginIncreaseVerb[arrMember] + 
+                                    " from " + valueList[i].value + " to " + valueList[i + 1].value + 
+                                    " by " + differenceThisTime + ". ");
                                 }
                                 else {
-                                    describe += (subject + " " + beginIncreaseVerb[arrMember] + " from " + valueList[i].value + " to " + valueList[i + 1].value + ". ");
+                                    describe += (subject + " " + beginIncreaseVerb[arrMember] + 
+                                    " from " + valueList[i].value + " to " + valueList[i + 1].value + ". ");
                                 }
                                 //describe += (subject + " increase from " + valueList[i].value + " to "+ valueList[i+1].value + ". ");
                             }
@@ -848,7 +851,9 @@
                                 }
                                 if (random_time_position == 1) {
                                     if (random == 1) {
-                                        describe += ("the price " + beginIncreaseVerb[arrMember] + " from " + tempStartValue + " in " + tempStartTime + " to " + tempEndValue + " in " + tempEndTime + ". ");
+                                        describe += ("the price " + beginIncreaseVerb[arrMember] + 
+                                        " from " + tempStartValue + " in " + tempStartTime + 
+                                        " to " + tempEndValue + " in " + tempEndTime + ". ");
                                     }
                                     else {
                                         describe += ("the price " + beginIncreaseVerb[arrMember] + " by " + (tempEndValue - tempStartValue) + " from " + tempStartValue + " in " + tempStartTime + " to " + tempEndValue + " in " + tempEndTime + ". ");
@@ -857,7 +862,10 @@
                                 else {
                                     if (random_1 == 1) {
                                         if (random_2 == 1) {
-                                            describe += ("the price " + beginIncreaseVerb[arrMember] + " by " + (tempEndValue - tempStartValue) + " from " + tempStartValue + " to " + tempEndValue + " from " + tempStartTime + " to " + tempEndTime + ". ");
+                                            describe += ("the price " + beginIncreaseVerb[arrMember] + 
+                                            " by " + (tempEndValue - tempStartValue) + 
+                                            " from " + tempStartValue + " to " + tempEndValue + 
+                                            " from " + tempStartTime + " to " + tempEndTime + ". ");
                                         }
                                         else {
                                             describe += ("the price " + beginIncreaseVerb[arrMember] + " from " + tempStartValue + " to " + tempEndValue + " from " + tempStartTime + " to " + tempEndTime + ". ");
