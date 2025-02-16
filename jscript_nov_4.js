@@ -8,6 +8,72 @@ var magMajorAdv = ["significantly", "sharply", "steeply", "dramatically"];
 var magMinorAdj = ["negligible", "marginal", "slight", "moderate"];
 var magMajorAdj = ["significant", "sharp", "steep", "dramatic"];
 
+document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const csvData = e.target.result;
+        const parsedData = parseCSV(csvData);
+        const smoothedData = smoothData(parsedData);
+        const summarizedData = summarizeTo12Points(smoothedData);
+        populateTable(summarizedData);
+    };
+    reader.readAsText(file);
+}
+
+function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    const data = lines.map(line => {
+        const [date, value] = line.split(',');
+        return { date: date.trim(), value: parseFloat(value.trim()) };
+    });
+    return data;
+}
+
+function smoothData(data) {
+    const windowSize = 5; // Moving average window size
+    const smoothed = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let sum = 0;
+        let count = 0;
+        for (let j = i - Math.floor(windowSize / 2); j <= i + Math.floor(windowSize / 2); j++) {
+            if (j >= 0 && j < data.length) {
+                sum += data[j].value;
+                count++;
+            }
+        }
+        smoothed.push({ date: data[i].date, value: sum / count });
+    }
+    return smoothed;
+}
+
+function summarizeTo12Points(data) {
+    const interval = Math.floor(data.length / 12);
+    const summarizedData = [];
+    for (let i = 0; i < 12; i++) {
+        const index = Math.min(i * interval, data.length - 1);
+        summarizedData.push(data[index]);
+    }
+    return summarizedData;
+}
+
+function populateTable(data) {
+    const rows = document.querySelectorAll('#tableBody tr');
+    data.forEach((item, index) => {
+        const timeInput = rows[index].querySelector('.time');
+        const valueInput = rows[index].querySelector('.value');
+
+        if (timeInput && valueInput) {
+            timeInput.value = item.date;
+            valueInput.value = item.value.toFixed(2);
+        }
+    });
+}
 
 function getRandomInteger(max) {
     if (typeof max !== 'number' || max < 0 || !Number.isInteger(max)) {
@@ -119,13 +185,13 @@ function valueDepender(valueFirst, valueLast)
             outputStr += " from " + valueFirst + " to " + valueLast + ". ";
         }
         else if (dependerRandom == 1){
-            outputStr += " from " + valueFirst + " to " + valueLast + " by " + Math.abs((valueFirst - valueLast)) + ". ";
+            outputStr += " from " + valueFirst + " to " + valueLast + " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + ". ";
         }
         else if (dependerRandom == 2){
-            outputStr += " from " + valueFirst + " by " + Math.abs((valueFirst - valueLast)) + ". ";
+            outputStr += " from " + valueFirst + " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + ". ";
         }
         else{
-            outputStr += " to " + valueLast + " by " + Math.abs((valueFirst - valueLast)) + ". "
+            outputStr += " to " + valueLast + " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + ". "
         }
     }
     
@@ -148,16 +214,16 @@ function valueDependerTimeMod(valueFirst, valueLast, timeFirst, timeLast)
             outputStr += " from " + valueFirst + " to " + valueLast + " from " + timeFirst + " to " + timeLast + ". ";
         }else if (dependerRandom == 2){
             //from 1 by 1 from Jan to Feb
-            outputStr += " from " + valueFirst + " by " + Math.abs((valueFirst - valueLast)) + " from " + timeFirst + " to " + timeLast + ". ";
+            outputStr += " from " + valueFirst + " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + " from " + timeFirst + " to " + timeLast + ". ";
         }else if (dependerRandom == 3){
             //to 2 by 1 from Jan to Feb
-            outputStr += " to " + valueLast + " by " + Math.abs((valueFirst - valueLast)) + " from " + timeFirst + " to " + timeLast + ". ";
+            outputStr += " to " + valueLast + " by " +(Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + " from " + timeFirst + " to " + timeLast + ". ";
         }else if (dependerRandom == 4){
             //by 1 from 1 in Jan to 2 in Feb
-            outputStr += " by " + Math.abs((valueFirst - valueLast)) + " from " + valueFirst + " in " + timeFirst + " to " + valueLast + " in " + timeLast + ". ";
+            outputStr += " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + " from " + valueFirst + " in " + timeFirst + " to " + valueLast + " in " + timeLast + ". ";
         }else{
             //by 1 from 1 to 2 from Jan to Feb
-            outputStr += " by " + Math.abs((valueFirst - valueLast)) + " from " + valueFirst + " to " + valueLast + " from " + timeFirst + " to " + timeLast + ". ";
+            outputStr += " by " + (Math.abs(valueFirst - valueLast) % 1 === 0 ? Math.abs(valueFirst - valueLast) : Math.abs(valueFirst - valueLast).toFixed(2)) + " from " + valueFirst + " to " + valueLast + " from " + timeFirst + " to " + timeLast + ". ";
         }
     }
     
