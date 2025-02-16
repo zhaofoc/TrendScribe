@@ -524,23 +524,27 @@ document.getElementById("startButtonUpperIntermediate").onclick = function () {
     document.getElementById("result").innerText = describe;
 }
 
-document.getElementById("startButtonUpperAdvanced").onclick = function () {
+document.getElementById("startButtonUpperAdvanced").onclick = async function () {
     var subject = document.getElementById("subjectInput").value;
-
     var timeList = document.getElementsByClassName("time");
     var valueList = document.getElementsByClassName("value");
-
-    var describe = "";
-
-    startSentence = generateIntroductoryUpperIntermediate(subject, timeList, valueList);
-    describe += startSentence;
-
-    describe += ("Following is a more specific description of the changes during th whole period. ");
-
-    paragraph = generateDescribeIntermediate(subject, timeList, valueList);
-    describe += paragraph;
-
-    document.getElementById("result").innerText = describe;
+    
+    // Call the Gemini analysis and get description
+    const result = await analyzeDataWithGemini(timeList, valueList);
+    
+    if (result && result.description) {
+        // Replace the original text with Gemini's description
+        document.getElementById("result").innerText = result.description;
+    } else {
+        // Fallback to original logic if API fails
+        var describe = "";
+        startSentence = generateIntroductoryUpperIntermediate(subject, timeList, valueList);
+        describe += startSentence;
+        describe += ("Following is a more specific description of the changes during th whole period. ");
+        paragraph = generateDescribeIntermediate(subject, timeList, valueList);
+        describe += paragraph;
+        document.getElementById("result").innerText = describe;
+    }
 }
 
 let chartInstance = null;
