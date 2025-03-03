@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>    
+    <title>TrendScribe</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        .table-container {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .upload-container {
+            margin-bottom: 20px;
+        }
+
+        .upload-container button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .upload-container button:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .upload-container button:hover {
+            background-color: #218838;
+        }
+        
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #218838;
+        }
+
+        .result-container {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="table-container">
+            <h2>TrendScribe</h2>
+            <div>
+                <p>Subject: <input type="text" id="subjectInput" value="the price of bananas"></p>
+            </div>
+            <div class="result-container" id="result">
+                Please input your data first, and then click the button below, text corresponding to the language proficiency level will be generated and displayed here.
+            </div>
+            <p></p>
+            <div class="button-container">
+                <button id="startButtonBeginner">Beginner</button>
+                <button id="startButtonElementary">Elementary</button>
+                <button id="startButtonPreIntermediate">Pre-intermediate</button>
+                <button id="startButtonIntermediate">Intermediate</button>
+                <button id="startButtonUpperIntermediate">Upper intermediate</button>
+                <button id="startButtonUpperAdvanced">Advanced</button>
+            </div>
+            <div>
+                <canvas id="showChart" width="800" height="300"></canvas>
+                <div class="button-container">
+                    <button id="startButtonGraph">Graph</button>
+                </div>
+            </div>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Time Point</th>
+                        <th>Data Value</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                <tr>
+                    <td><input type="text" class="time" value="January"></td>
+                    <td><input type="text" class="value" value="10"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="February"></td>
+                    <td><input type="text" class="value" value="50"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="March"></td>
+                    <td><input type="text" class="value" value="60"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="April"></td>
+                    <td><input type="text" class="value" value="70"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="May"></td>
+                    <td><input type="text" class="value" value="160"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="June"></td>
+                    <td><input type="text" class="value" value="100"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="July"></td>
+                    <td><input type="text" class="value" value="30"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="August"></td>
+                    <td><input type="text" class="value" value="10"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="September"></td>
+                    <td><input type="text" class="value" value="110"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="October"></td>
+                    <td><input type="text" class="value" value="150"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="November"></td>
+                    <td><input type="text" class="value" value="90"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="time" value="December"></td>
+                    <td><input type="text" class="value" value="80"></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        <div class="upload-container">
+            <input type="file" id="fileInput" accept=".csv">
+            <p>You can also upload a .csv format file with two columns. </p>
+            <p>The first column should be the date column, and the second column is the value column.</p>
+            <p>If your file contains over 12 rows the data will be smoothed to create 12 data points.</p>
+        <div>
+            
+        </div>
+    </div>
+    <script src="gemini_api_mar_02.js"></script>
+    <script src="jscript_mar_02.js"></script>
+</body>
+
+</html>

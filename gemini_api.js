@@ -1,7 +1,5 @@
-// gemini_api.js
-
 async function analyzeDataWithGemini(timeList, valueList) {
-    const API_KEY = 'AIzaSyBBo9isvwf-Bn1YxKElI_VpVAJLX2QNPNQ';
+    const API_KEY = 'KEY_REMOVED';
     const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
     
     // Prepare data for analysis
